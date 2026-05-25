@@ -14,7 +14,7 @@ async function isAdmin(request) {
   }
 }
 
-export async function middleware(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl;
 
   // 需要登录的页面
