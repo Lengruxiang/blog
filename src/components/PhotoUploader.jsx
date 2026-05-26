@@ -16,22 +16,26 @@ export default function PhotoUploader({ onUpload }) {
     }
 
     setUploading(false);
+    e.target.value = '';
     onUpload?.();
   };
 
   return (
-    <div className="mb-6">
-      <label className="inline-block px-4 py-2 bg-zinc-900 text-white rounded-lg font-medium text-sm hover:bg-zinc-800 cursor-pointer transition-colors">
-        {uploading ? '上传中...' : '上传照片'}
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleUpload}
-          className="hidden"
-          disabled={uploading}
-        />
-      </label>
-    </div>
+    <label className="tb-photo-upload-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+      {uploading ? '上传中...' : '上传照片'}
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleUpload}
+        style={{ display: 'none' }}
+        disabled={uploading}
+      />
+    </label>
   );
 }

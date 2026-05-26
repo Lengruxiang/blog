@@ -1,10 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -14,65 +15,49 @@ export default function Header() {
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     setAdmin(false);
-    window.location.href = '/';
+    router.push('/');
   };
 
+  const isActive = (path) => pathname === path;
+
   return (
-    <header className="bg-white border-b border-zinc-200 sticky top-0 z-50">
-      <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-zinc-900 no-underline">
+    <header className="tb-header">
+      <div className="tb-header-inner">
+        <Link href="/" className="tb-logo">
+          <span className="tb-logo-icon">B</span>
           我的博客
         </Link>
-        <nav className="flex gap-1 items-center">
-          <Link
-            href="/"
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
-              pathname === '/'
-                ? 'bg-zinc-100 text-zinc-900'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
-            }`}
-          >
+
+        <nav className="tb-nav">
+          <Link href="/" className={`tb-nav-link${isActive('/') ? ' active' : ''}`}>
             首页
           </Link>
+
           {admin && (
             <>
               <Link
                 href="/posts/new"
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
-                  pathname === '/posts/new'
-                    ? 'bg-zinc-100 text-zinc-900'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
-                }`}
+                className={`tb-nav-link${isActive('/posts/new') ? ' active' : ''}`}
               >
-                写文章
+                发帖
               </Link>
               <Link
                 href="/photos"
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
-                  pathname === '/photos'
-                    ? 'bg-zinc-100 text-zinc-900'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
-                }`}
+                className={`tb-nav-link${isActive('/photos') ? ' active' : ''}`}
               >
-                照片墙
+                相册
               </Link>
             </>
           )}
+
           {admin ? (
-            <button
-              onClick={handleLogout}
-              className="px-3 py-1.5 rounded-md text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 transition-colors"
-            >
+            <button onClick={handleLogout} className="tb-btn tb-btn-outline">
               退出
             </button>
           ) : (
             <Link
               href="/login"
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
-                pathname === '/login'
-                  ? 'bg-zinc-100 text-zinc-900'
-                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
-              }`}
+              className={`tb-nav-link${isActive('/login') ? ' active' : ''}`}
             >
               登录
             </Link>

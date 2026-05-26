@@ -7,10 +7,10 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  const { title, content, cover_image } = await request.json();
+  const { title, content, cover_image, category } = await request.json();
   if (!title) {
     return NextResponse.json({ error: '标题不能为空' }, { status: 400 });
   }
-  const post = await createPost({ title, content, cover_image });
+  const post = await createPost({ title, content, cover_image, category });
   return NextResponse.json(post, { status: 201 });
 }

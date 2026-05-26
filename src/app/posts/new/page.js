@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PostEditor from '@/components/PostEditor';
+import Link from 'next/link';
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -20,9 +21,18 @@ export default function NewPostPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-zinc-900 mb-6">写文章</h1>
-      <PostEditor onSave={handleSave} saving={saving} />
+    <div className="tb-main">
+      <div className="tb-breadcrumb">
+        <Link href="/">首页</Link>
+        <span>/</span>
+        <span style={{ color: '#374151' }}>发帖</span>
+      </div>
+
+      <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#1f2937', marginBottom: '16px' }}>
+        发布新帖
+      </h1>
+
+      <PostEditor onSave={handleSave} saving={saving} showCategory />
     </div>
   );
 }

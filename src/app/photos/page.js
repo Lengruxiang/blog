@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import PhotoUploader from '@/components/PhotoUploader';
+import Link from 'next/link';
 
 function imgSrc(filename) {
-  return filename?.startsWith('http') ? filename : `/uploads/${filename}`;
+  return filename?.startsWith('http') ? filename : `/api/uploads/${filename}`;
 }
 
 export default function PhotosPage() {
@@ -20,25 +21,32 @@ export default function PhotosPage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-zinc-900 mb-6">照片墙</h1>
-      <PhotoUploader onUpload={fetchPhotos} />
+    <div className="tb-main">
+      <div className="tb-breadcrumb">
+        <Link href="/">首页</Link>
+        <span>/</span>
+        <span style={{ color: '#374151' }}>照片墙</span>
+      </div>
+
+      <div className="tb-photos-header">
+        <h1 className="tb-photos-title">照片墙</h1>
+        <PhotoUploader onUpload={fetchPhotos} />
+      </div>
 
       {photos.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-zinc-500 text-lg">还没有照片，点击上方按钮上传</p>
+        <div className="tb-empty">
+          <div className="tb-empty-icon">🖼️</div>
+          <p className="tb-empty-text">还没有照片</p>
+          <p style={{ fontSize: '13px', color: '#d1d5db' }}>点击上方按钮上传你的第一张照片</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className="aspect-square rounded-lg overflow-hidden border border-zinc-200 bg-white"
-            >
+        <div className="tb-photo-grid">
+          {photos.map((photo, i) => (
+            <div key={photo.id} className="tb-photo-item" style={{ animationDelay: `${i * 30}ms` }}>
               <img
                 src={imgSrc(photo.filename)}
                 alt={photo.original_name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform"
+                loading="lazy"
               />
             </div>
           ))}

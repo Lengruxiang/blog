@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: '我的博客',
   description: '个人博客 - 记录生活与想法',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -23,11 +26,11 @@ export default function RootLayout({ children }) {
       lang="zh-CN"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900">
+      <body className="min-h-full flex flex-col">
         <Header />
         <main className="flex-1">{children}</main>
-        <footer className="py-6 text-center text-sm text-zinc-400 border-t border-zinc-200 mt-12">
-          我的博客 &copy; {new Date().getFullYear()}
+        <footer className="tb-footer">
+          &copy; {new Date().getFullYear()} 我的博客 &mdash; Powered by Next.js
         </footer>
       </body>
     </html>

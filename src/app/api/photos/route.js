@@ -16,7 +16,7 @@ export async function POST(request) {
   }
 
   let filename;
-  let originalName = file.name;
+  const originalName = file.name;
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(file.name, file, { access: 'public' });
@@ -27,8 +27,8 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const ext = path.extname(file.name) || '.jpg';
-    const localName = Date.now() + ext;
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+    const localName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+    const uploadsDir = path.join(process.cwd(), 'data', 'uploads');
     await mkdir(uploadsDir, { recursive: true });
     await writeFile(path.join(uploadsDir, localName), buffer);
     filename = localName;

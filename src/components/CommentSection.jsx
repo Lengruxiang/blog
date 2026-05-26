@@ -1,6 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+function toAvatarChar(name) {
+  return (name || '匿')[0];
+}
+
 export default function CommentSection({ postId }) {
   const [comments, setComments] = useState([]);
   const [author, setAuthor] = useState('');
@@ -33,48 +37,69 @@ export default function CommentSection({ postId }) {
   };
 
   return (
-    <div>
-      <h3 className="text-lg font-semibold text-zinc-900 mb-4">
-        评论 ({comments.length})
-      </h3>
+    <div className="tb-comments">
+      <div className="tb-comments-header">
+        回复 ({comments.length})
+      </div>
 
-      <form onSubmit={handleSubmit} className="mb-6 space-y-3">
-        <input
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          placeholder="你的昵称（选填）"
-          className="w-full px-3 py-2 border border-zinc-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 text-zinc-900"
-        />
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="写下你的评论..."
-          rows={3}
-          className="w-full px-3 py-2 border border-zinc-200 rounded-md text-sm resize-y focus:outline-none focus:ring-2 focus:ring-zinc-400 text-zinc-900"
-        />
+      <div className="tb-comments-list">
+        {comments.map((c, i) => (
+          <div key={c.id} className="tb-comment-item">
+            <div className="tb-comment-floor">{i + 1}楼</div>
+            <div className="tb-comment-avatar">{toAvatarChar(c.author)}</div>
+            <div className="tb-comment-body">
+              <div>
+                <span className="tb-comment-author">{c.author}</span>
+                <span className="tb-comment-time">
+                  {new Date(c.created_at).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}{' '}
+                  {new Date(c.created_at).toLocaleTimeString('zh-CN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+              <div className="tb-comment-text">{c.content}</div>
+            </div>
+          </div>
+        ))}
+
+        {comments.length === 0 && (
+          <div style={{ padding: '32px', textAlign: 'center', color: '#d1d5db', fontSize: '14px' }}>
+            暂无回复，来说点什么吧
+          </div>
+        )}
+      </div>
+
+      <form onSubmit={handleSubmit} className="tb-comment-form">
+        <div className="tb-comment-input-wrap">
+          <input
+            type="text"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="昵称（选填）"
+            className="tb-input"
+            maxLength={20}
+          />
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="写下你的回复..."
+            rows={3}
+            className="tb-input"
+          />
+        </div>
         <button
           type="submit"
           disabled={submitting || !content.trim()}
-          className="px-4 py-1.5 bg-zinc-900 text-white rounded-md text-sm font-medium hover:bg-zinc-800 disabled:opacity-50 transition-colors"
+          className="tb-btn-submit"
         >
-          {submitting ? '提交中...' : '发表评论'}
+          {submitting ? '提交中' : '发表'}
         </button>
       </form>
-
-      <div className="space-y-4">
-        {comments.map((c) => (
-          <div key={c.id} className="p-3 bg-zinc-50 rounded-md">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-medium text-zinc-700">{c.author}</span>
-              <span className="text-xs text-zinc-400">
-                {new Date(c.created_at).toLocaleDateString('zh-CN')}
-              </span>
-            </div>
-            <p className="text-sm text-zinc-600">{c.content}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

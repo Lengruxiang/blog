@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import PostEditor from '@/components/PostEditor';
+import Link from 'next/link';
 
 export default function EditPostPage() {
   const router = useRouter();
@@ -27,35 +28,45 @@ export default function EditPostPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('确定要删除这篇文章吗？')) return;
+    if (!confirm('确定要删除这个帖子吗？')) return;
     await fetch(`/api/posts/${params.id}`, { method: 'DELETE' });
     router.push('/');
   };
 
   if (!post) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        <p className="text-zinc-500">加载中...</p>
+      <div className="tb-main">
+        <div style={{ textAlign: 'center', padding: '40px', color: '#9ca3af' }}>加载中...</div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-zinc-900">编辑文章</h1>
-        <button
-          onClick={handleDelete}
-          className="px-4 py-1.5 text-red-600 border border-red-300 rounded-md text-sm hover:bg-red-50 transition-colors"
-        >
-          删除文章
+    <div className="tb-main">
+      <div className="tb-breadcrumb">
+        <Link href="/">首页</Link>
+        <span>/</span>
+        <Link href={`/posts/${post.id}`}>帖子详情</Link>
+        <span>/</span>
+        <span style={{ color: '#374151' }}>编辑</span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#1f2937', margin: 0 }}>
+          编辑帖子
+        </h1>
+        <button onClick={handleDelete} className="tb-btn tb-btn-danger">
+          删除帖子
         </button>
       </div>
+
       <PostEditor
         initialTitle={post.title}
         initialContent={post.content}
+        initialCover={post.cover_image}
         onSave={handleSave}
         saving={saving}
+        showCategory
       />
     </div>
   );
