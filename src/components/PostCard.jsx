@@ -5,7 +5,9 @@ function toAvatarChar(title) {
 }
 
 function imgSrc(filename) {
-  return filename?.startsWith('http') ? filename : `/api/uploads/${filename}`;
+  if (!filename) return '';
+  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
+  return `/api/uploads/${filename}`;
 }
 
 export default function PostCard({ post }) {

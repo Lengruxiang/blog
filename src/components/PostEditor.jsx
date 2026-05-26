@@ -3,7 +3,9 @@ import { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 function imgSrc(filename) {
-  return filename?.startsWith('http') ? filename : `/api/uploads/${filename}`;
+  if (!filename) return '';
+  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
+  return `/api/uploads/${filename}`;
 }
 
 function insertAtCursor(textarea, text) {

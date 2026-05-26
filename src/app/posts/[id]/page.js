@@ -7,7 +7,9 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 function imgSrc(filename) {
-  return filename?.startsWith('http') ? filename : `/api/uploads/${filename}`;
+  if (!filename) return '';
+  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
+  return `/api/uploads/${filename}`;
 }
 
 function toAvatarChar(title) {
