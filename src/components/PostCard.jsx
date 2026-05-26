@@ -6,7 +6,7 @@ function toAvatarChar(title) {
 
 function imgSrc(filename) {
   if (!filename) return '';
-  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
+  if (filename.startsWith('http') || filename.startsWith('data:') || filename.startsWith('/api/')) return filename;
   return `/api/uploads/${filename}`;
 }
 

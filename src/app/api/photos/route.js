@@ -37,8 +37,8 @@ export async function POST(request) {
       filename = `data:${mime};base64,${base64}`;
     }
 
-    await addPhoto(filename, originalName);
-    return NextResponse.json({ success: true, filename }, { status: 201 });
+    const result = await addPhoto(filename, originalName);
+    return NextResponse.json({ success: true, id: Number(result.lastInsertRowid), filename }, { status: 201 });
   } catch (err) {
     console.error('Photo upload error:', err);
     return NextResponse.json({ error: '上传失败，请重试' }, { status: 500 });

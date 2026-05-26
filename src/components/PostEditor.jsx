@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 
 function imgSrc(filename) {
   if (!filename) return '';
-  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
+  if (filename.startsWith('http') || filename.startsWith('data:') || filename.startsWith('/api/')) return filename;
   return `/api/uploads/${filename}`;
 }
 
@@ -37,13 +37,13 @@ export default function PostEditor({ initialTitle = '', initialContent = '', ini
 
     if (data.filename) {
       if (insertToContent) {
-        const url = imgSrc(data.filename);
+        // 用短链接引用图片，不嵌入超长 base64
+        const url = `/api/photos/${data.id}/image`;
         const md = `![${file.name}](${url})`;
         const textarea = textareaRef.current;
         if (textarea) {
           const newContent = insertAtCursor(textarea, md + '\n');
           setContent(newContent);
-          // restore cursor
           setTimeout(() => {
             const pos = textarea.selectionStart;
             textarea.focus();
@@ -53,7 +53,7 @@ export default function PostEditor({ initialTitle = '', initialContent = '', ini
           setContent((c) => c + (c ? '\n' : '') + md + '\n');
         }
       } else {
-        setCoverImage(data.filename);
+        setCoverImage(`/api/photos/${data.id}/image`);
       }
     }
   };

@@ -127,6 +127,14 @@ export async function getAllPhotos(page = 1, limit = 20) {
   return result.rows;
 }
 
+export async function getPhotoById(id) {
+  const result = await client.execute({
+    sql: 'SELECT * FROM photos WHERE id = ?',
+    args: [id],
+  });
+  return result.rows[0] ?? null;
+}
+
 export async function addPhoto(filename, original_name) {
   return client.execute({
     sql: 'INSERT INTO photos (filename, original_name) VALUES (?, ?)',
