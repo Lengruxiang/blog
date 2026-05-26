@@ -34,21 +34,20 @@ export default function Header() {
           </Link>
 
           {admin && (
-            <>
-              <Link
-                href="/posts/new"
-                className={`tb-nav-link${isActive('/posts/new') ? ' active' : ''}`}
-              >
-                发帖
-              </Link>
-              <Link
-                href="/photos"
-                className={`tb-nav-link${isActive('/photos') ? ' active' : ''}`}
-              >
-                相册
-              </Link>
-            </>
+            <Link
+              href="/posts/new"
+              className={`tb-nav-link${isActive('/posts/new') ? ' active' : ''}`}
+            >
+              发帖
+            </Link>
           )}
+
+          <Link
+            href="/photos"
+            className={`tb-nav-link${isActive('/photos') ? ' active' : ''}`}
+          >
+            相册
+          </Link>
 
           {admin ? (
             <button onClick={handleLogout} className="tb-btn tb-btn-outline">
