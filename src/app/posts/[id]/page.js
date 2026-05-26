@@ -1,16 +1,11 @@
 import { getPostById, incrementPostViews } from '@/lib/db';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
+
+import PostContent from '@/components/PostContent';
 import CommentSection from '@/components/CommentSection';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
-
-function imgSrc(filename) {
-  if (!filename) return '';
-  if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
-  return `/api/uploads/${filename}`;
-}
 
 function toAvatarChar(title) {
   return (title || '?')[0];
@@ -72,22 +67,11 @@ export default async function PostPage({ params }) {
           </div>
         </div>
 
-        {post.cover_image && (
-          <img
-            src={imgSrc(post.cover_image)}
-            alt={post.title}
-            style={{
-              width: '100%',
-              maxHeight: '400px',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-        )}
-
-        <div className="tb-post-detail-body prose-custom">
-          <ReactMarkdown>{post.content}</ReactMarkdown>
-        </div>
+        <PostContent
+          content={post.content}
+          coverImage={post.cover_image}
+          coverAlt={post.title}
+        />
 
         <div className="tb-post-detail-footer">
           <span>
